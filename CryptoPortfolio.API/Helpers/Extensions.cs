@@ -2,7 +2,7 @@
 {
     public static class Extensions
     {
-        public static string CalculatePercentageChange(decimal currentPrice, decimal initialPrice)
+        public static decimal CalculatePercentageChange(decimal currentPrice, decimal initialPrice)
         {
             if (initialPrice == 0)
             {
@@ -12,8 +12,7 @@
             decimal difference = currentPrice - initialPrice;
             decimal percentageChange = difference / initialPrice * 100;
 
-            // Format the result with two decimal places and "%" symbol
-            return decimal.Parse(percentageChange.ToString()).ToString("0.00") + "%";
+            return decimal.Parse(percentageChange.ToString());
         }
     }
 }

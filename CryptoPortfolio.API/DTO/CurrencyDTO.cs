@@ -14,7 +14,7 @@ namespace CryptoPortfolio.API.DTO
 
         public decimal CurrentValue { get; set; }
 
-        public string ChangeInPercent 
+        public decimal ChangeInPercent 
         { 
             get 
             {

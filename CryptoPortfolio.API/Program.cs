@@ -17,15 +17,10 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddSerilog(dispose: true);
 });
 
-builder.Services.AddTransient<APIIntegrationService, APIIntegrationService>();
-builder.Services.AddTransient<ApplicationService, ApplicationService>();
+builder.Services.AddTransient<IAPIIntegrationService, APIIntegrationService>();
+builder.Services.AddTransient<IApplicationService, ApplicationService>();
 
 builder.Services.AddHttpClient();
-
-builder.Services.AddHttpClient("Coinlore", httpClient =>
-{
-    httpClient.BaseAddress = new Uri("https://api.github.com/");
-});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

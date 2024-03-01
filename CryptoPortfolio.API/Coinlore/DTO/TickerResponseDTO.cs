@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CryptoPortfolio.API.DTO
+namespace CryptoPortfolio.API.Coinlore.DTO
 {
     public class TickerResponseDTO
     {
