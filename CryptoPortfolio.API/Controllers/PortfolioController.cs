@@ -11,36 +11,36 @@ namespace CryptoPortfolio.API.Controllers
     [Route("api/[controller]")]
     public class PortfolioController : ControllerBase
     {
-        private readonly ApplicationService _applicationService;
+        private readonly IApplicationService _applicationService;
 
 
-        public PortfolioController(ApplicationService applicationService)
+        public PortfolioController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
         }
 
-        [HttpGet("GetPortfolio")]
-        public async Task<IActionResult> GetUpdatedPortfolio([FromQuery]long portfolioId)
+        [HttpGet("RefreshPortfolio")]
+        public async Task<IActionResult> RefreshPortfolio([FromQuery]long portfolioId)
         {
-            var result = await this._applicationService.GetUpdatePortfolio(portfolioId);
+            var result = await this._applicationService.RefreshPortfolio(portfolioId);
 
             return new JsonResult(result);
         }
 
-        [HttpPost("Upload")]
-        public async Task<ActionResult> Upload([FromForm] FileUploadDTO fileUpload)
+        [HttpPost("ImportPortfolio")]
+        public async Task<ActionResult> ImportPortfolio([FromForm] FileUploadDTO fileUpload)
         {
             if (fileUpload.File == null || fileUpload.File.Length == 0)
             {
                 return BadRequest("No file uploaded");
             }
 
-            if (!fileUpload.File.ContentType.StartsWith("text/")) // Check for text/*
+            if (!fileUpload.File.ContentType.StartsWith("text/"))
             {
                 return BadRequest("Only text files are allowed");
             }
 
-            var portfolioId = await this._applicationService.CreatePortfolio(fileUpload);
+            var portfolioId = await this._applicationService.ImportPortfolio(fileUpload);
 
             return Ok(portfolioId);
         }

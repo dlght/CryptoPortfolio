@@ -12,7 +12,7 @@ namespace CryptoPortfolio.API.DTO
 
         public List<CurrencyDTO> Currencies { get; set; }
 
-        public string ChangeTotalInPercentage 
+        public decimal ChangeTotalInPercentage 
         { 
             get 
             {
