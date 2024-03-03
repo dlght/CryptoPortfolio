@@ -10,6 +10,7 @@ namespace CryptoPortfolio.API.Coinlore
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<APIIntegrationService> _logger;
         private readonly IConfiguration _configuration;
+        private readonly string _coinloreBaseUrl;
 
         public APIIntegrationService(
             IHttpClientFactory httpClientFactory,
@@ -19,20 +20,19 @@ namespace CryptoPortfolio.API.Coinlore
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _logger = logger;
+            _coinloreBaseUrl = _configuration["CoinloreConfig:BaseAddress"];
         }
 
         public async Task<TickerResponseDTO> GetTicker(CoinloreCryptoCurrenciesEnum currency)
         {
+            _logger.LogCritical($"Trying to refresh data from coinlore/ticker for currency: {currency}");
+
             try
             {
-                _logger.LogCritical($"Trying to refresh data from coinlore/ticker for currency: {currency}");
-
-                var baseAddress = _configuration["CoinloreConfig:BaseAddress"];
                 var tickerEndpoint = _configuration["CoinloreConfig:Endpoints:Ticker"];
 
-                string url = $"{baseAddress}{tickerEndpoint}/?id=";
-
-                var requestUrl = url + (int)currency;
+                string _tickerEndpointUrl = $"{_coinloreBaseUrl}{tickerEndpoint}/?id=";
+                var requestUrl = _tickerEndpointUrl + (int)currency;
 
                 _logger.LogCritical($"Request ticker with url: {requestUrl}");
 
@@ -46,6 +46,8 @@ namespace CryptoPortfolio.API.Coinlore
 
                     var settings = new JsonSerializerSettings { Culture = CultureInfo.InvariantCulture };
                     var tickerResult = JsonConvert.DeserializeObject<List<TickerResponseDTO>>(responseContent);
+
+                    // return the first result -- according to the documentation if its not a list of 1 it should return exception
                     return tickerResult.First();
                 }
                 else

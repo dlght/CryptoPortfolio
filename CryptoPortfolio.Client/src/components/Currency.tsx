@@ -2,7 +2,7 @@ import React from 'react';
 import CurrencyModel from '../models/CurrencyModel';
 import Title from './Title';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import NumberFormatted from './NumberFormatted';
+import NumberFormatted from '../utils/NumberFormatted';
 
 interface CurrencyProps {
   currencyList: CurrencyModel[];

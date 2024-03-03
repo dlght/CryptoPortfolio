@@ -51,10 +51,10 @@ namespace CryptoPortfolio.API.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 // Handle file access errors
-                Console.WriteLine($"Error reading file: {fileUpload.File.FileName}, Exception: {ex.Message}");
+                throw new InvalidOperationException($"Error reading file: {fileUpload.File.FileName}, Exception: {ex.Message}");
             }
 
             decimal total = 0m;
@@ -111,7 +111,7 @@ namespace CryptoPortfolio.API.Services
                 var parts = line.Split('|');
                 if (parts.Length != 3)
                 {
-                    throw new Exception($"Invalid line format: {line}");
+                    throw new ArgumentException($"Invalid line format: {line}");
                 }
 
                 var holding = new CurrencyDTO
@@ -127,8 +127,15 @@ namespace CryptoPortfolio.API.Services
             }
             catch (Exception ex)
             {
-                // Log or handle parsing errors for specific lines
-                throw new ArgumentException($"Cannot parse current row: {line}");
+                if (ex is ArgumentException)
+                {
+                    throw;
+                }
+                else
+                {
+                    // Log or handle parsing errors for specific lines
+                    throw new ArgumentException($"Cannot parse current row: {line}");
+                }
             }
         }
 
