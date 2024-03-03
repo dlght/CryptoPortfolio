@@ -6,11 +6,14 @@ import * as React from 'react';
 import PortfolioModel from '../models/PortfolioModel';
 import Currency from './Currency';
 import Title from './Title';
-import NumberFormatted from './NumberFormatted';
+import NumberFormatted from '../utils/NumberFormatted';
+import { formatDateWithIntl } from '../utils/date-utils';
+import { toast } from 'react-toastify';
 
 const Dashboard: React.FC = () => {
   const [portfolioId, setPortfolioId] = useState(0);
   const [portfolio, setPortfolio] = useState<PortfolioModel | null>();
+  const [dateOfUpdate, setDateOfUpdate] = useState<Date | null>(null);
   const importPortfolio = 'Portfolio/ImportPortfolio';
   const refreshPortfolio = 'Portfolio/RefreshPortfolio?portfolioId=';
   const interval = Number(process.env.REACT_APP_REFRESH_PORTFOLIO_INTERVAL);
@@ -29,6 +32,7 @@ const Dashboard: React.FC = () => {
         setPortfolioId(portfolioIdResponse);
       } catch (error) {
         setPortfolioId(0);
+        toast.error("Portfolio import encountered an error. Please try again.");
       }
   }
 
@@ -38,6 +42,7 @@ const Dashboard: React.FC = () => {
         const response = await get<PortfolioModel>(refreshPortfolio + portfolioId);
         if (response) {
           setPortfolio(response); // Update state after successful response
+          setDateOfUpdate(new Date());
         }
       } catch (error) {
         console.log("Couldn't get portfolio.");
@@ -106,6 +111,13 @@ const Dashboard: React.FC = () => {
           </Container>
 
       { portfolio?.currencies ? <Currency currencyList={portfolio?.currencies || []}/> : null }
+      { dateOfUpdate != null ?
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ pt: 4 }}>
+          {'This page displays portfolio information as of '}
+          {formatDateWithIntl(dateOfUpdate)}
+          {' (local time).'}
+      </Typography> 
+      : null }
     </React.Fragment>
   );
 };

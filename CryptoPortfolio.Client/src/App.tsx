@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Dashboard from './components/Dashboard';
+import { ToastContainer } from 'react-toastify';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -36,55 +37,55 @@ const defaultTheme = createTheme();
 
 export default function App() {
   const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
+    <React.Fragment>
+      <ThemeProvider theme={defaultTheme}>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <AppBar position="absolute" open={open}>
+            <Toolbar
+              sx={{
+                pr: '24px', // keep right padding when drawer closed
+              }}
+            >
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                //sx={{ flexGrow: 1 }}
+              >
+                Dashboard
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Box
+            component="main"
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: '100vh',
+              overflow: 'auto',
             }}
           >
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              //sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Dashboard />
-                </Paper>
+            <Toolbar />
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <Dashboard />
+                  </Paper>
+                </Grid>
               </Grid>
-            </Grid>
-          </Container>
+            </Container>
+          </Box>
         </Box>
-      </Box>
-    </ThemeProvider>
+      </ThemeProvider>
+      <ToastContainer />
+    </React.Fragment>
   );
 }
