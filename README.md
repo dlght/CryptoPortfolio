@@ -22,4 +22,4 @@ Update the current portfolio value and percentage changes at a configurable inte
 ### Logging 
 Log all operations (e.g., file upload, portfolio updates) to a file for record keeping.
 
-#Note: This is a general overview of the project. 
+### Note: This is a general overview of the project. 
